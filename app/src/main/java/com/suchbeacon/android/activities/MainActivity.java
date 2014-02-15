@@ -1,4 +1,4 @@
-package com.suchbeacon.android;
+package com.suchbeacon.android.activities;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -8,8 +8,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
-import android.text.ClipboardManager;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +20,9 @@ import android.view.ViewGroup;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.common.AccountPicker;
+import com.suchbeacon.android.BeaconMonitor;
+import com.suchbeacon.android.Constants;
+import com.suchbeacon.android.R;
 
 import java.io.IOException;
 
@@ -48,7 +50,7 @@ public class MainActivity extends Activity {
                     .commit();
         }
 
-        String account = sharedPrefs.getString("account", null);
+        final String account = sharedPrefs.getString("account", null);
         if (account == null) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, ACCOUNT_PICK_REQUEST_CODE);
