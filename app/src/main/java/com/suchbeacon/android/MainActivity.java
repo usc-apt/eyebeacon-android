@@ -25,11 +25,6 @@ public class MainActivity extends Activity {
     private static final int ACCOUNT_PICK_REQUEST_CODE = 1;
     private static final int REQUEST_AUTHORIZATION = 2;
 
-    //private static final String SCOPE_AUDIENCE = "oauth2:server:client_id:957485525610-b4blookhl83grrnq4e4imoiaq4h4nl7h.apps.googleusercontent.com";
-    //private static final String SCOPE_SCOPES = "api_scope:https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/userinfo.profile";
-    //private static final String SCOPE = SCOPE_AUDIENCE + ":" + SCOPE_SCOPES;
-    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location";
-
     private static final String TAG = "MainActivity";
 
     @Override
@@ -54,7 +49,7 @@ public class MainActivity extends Activity {
                 @Override
                 protected Void doInBackground(Void... voids) {
                     try {
-                        Log.d("token", GoogleAuthUtil.getToken(MainActivity.this, account, SCOPE));
+                        Log.d("token", GoogleAuthUtil.getToken(MainActivity.this, account, Constants.SCOPE));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (UserRecoverableAuthException e) {
@@ -83,8 +78,8 @@ public class MainActivity extends Activity {
                     @Override
                     protected Void doInBackground(Void... voids) {
                         try {
-                            Log.d("scope", SCOPE);
-                            Log.d("token", GoogleAuthUtil.getToken(MainActivity.this, accountName, SCOPE));
+                            Log.d("scope", Constants.SCOPE);
+                            Log.d("token", GoogleAuthUtil.getToken(MainActivity.this, accountName, Constants.SCOPE));
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (UserRecoverableAuthException e) {
