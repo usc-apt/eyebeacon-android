@@ -18,14 +18,16 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
+import com.radiusnetworks.ibeacon.IBeacon;
 import com.radiusnetworks.ibeacon.IBeaconConsumer;
 import com.radiusnetworks.ibeacon.IBeaconManager;
-import com.radiusnetworks.ibeacon.MonitorNotifier;
+import com.radiusnetworks.ibeacon.RangeNotifier;
 import com.radiusnetworks.ibeacon.Region;
 
 import java.io.IOException;
+import java.util.Collection;
 
-public class MainActivity extends Activity implements IBeaconConsumer, MonitorNotifier {
+public class MainActivity extends Activity implements IBeaconConsumer, RangeNotifier {
 
     private static final int ACCOUNT_PICK_REQUEST_CODE = 1;
     private static final int REQUEST_AUTHORIZATION = 2;
@@ -36,6 +38,8 @@ public class MainActivity extends Activity implements IBeaconConsumer, MonitorNo
     private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location";
 
     private static final String uuid = "0f4228c0-95ff-11e3-a5e2-0800200c9a66";
+
+    private static final String TAG = "MainActivity";
 
     private IBeaconManager iBeaconManager = IBeaconManager.getInstanceForApplication(this);
 
@@ -130,27 +134,26 @@ public class MainActivity extends Activity implements IBeaconConsumer, MonitorNo
 
     @Override
     public void onIBeaconServiceConnect() {
-        iBeaconManager.setMonitorNotifier(this);
+        iBeaconManager.setRangeNotifier(this);
         try {
-            iBeaconManager.startMonitoringBeaconsInRegion(new Region(uuid, null, null, null));
+            iBeaconManager.startRangingBeaconsInRegion(new Region(uuid, null, null, null));
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void didEnterRegion(Region region) {
-        Log.d("enter", region.getMajor() + "," + region.getMinor() + "," + region.getUniqueId());
-    }
-
-    @Override
-    public void didExitRegion(Region region) {
-        Log.d("exit", region.getMajor() + "," + region.getMinor());
-    }
-
-    @Override
-    public void didDetermineStateForRegion(int i, Region region) {
-
+    public void didRangeBeaconsInRegion(Collection<IBeacon> iBeacons, Region region) {
+        IBeacon closestBeacon = null;
+        for (IBeacon beacon : iBeacons) {
+            if (closestBeacon == null || beacon.getAccuracy() < closestBeacon.getAccuracy())
+                closestBeacon = beacon;
+        }
+        if (closestBeacon != null) {
+            Log.i(TAG, "closest beacon = " + closestBeacon.getMajor() + "," + closestBeacon.getMinor());
+        } else {
+            Log.i(TAG, "no beacon detected");
+        }
     }
 
     /**
