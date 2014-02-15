@@ -91,6 +91,7 @@ public class LoginActivity extends Activity {
                 venmoWebView.setWebViewClient(new WebViewClient() {
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        view.loadUrl(url);
                         int isRedirect = url.indexOf(getString(R.string.venmo_redirect));
                         if (isRedirect == 0) {
                             Log.v(TAG, "redirect detected");
