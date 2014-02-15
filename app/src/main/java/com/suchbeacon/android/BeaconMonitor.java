@@ -102,7 +102,7 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent serviceIntent = new Intent(this, BeaconMonitor.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 7824, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 50, SCAN_INTERVAL, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + SCAN_INTERVAL, pendingIntent);
     }
 
     @Override
