@@ -51,8 +51,9 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (closestBeacon != null) {
-                    Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + "," + closestBeacon.getMinor() + " " + closestBeacon.getAccuracy() + "m away");
+                //found a beacon and its less than 3 meters away
+                if (closestBeacon != null && closestBeacon.getAccuracy() < 3) {
+                    Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + closestBeacon.getAccuracy() + "m away");
 
 
                     Notification notif = new Notification.Builder(BeaconMonitor.this)
