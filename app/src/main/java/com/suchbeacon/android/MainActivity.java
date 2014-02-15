@@ -22,7 +22,6 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class MainActivity extends Activity implements BluetoothAdapter.LeScanCallback {
 
@@ -127,7 +126,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             }, SCAN_PERIOD);
 
             mScanning = true;
-            BluetoothAdapter.getDefaultAdapter().startLeScan(new UUID[]{UUID.fromString("B0702880-A295-A8AB-F734-031A98A512DE")}, this);
+            BluetoothAdapter.getDefaultAdapter().startLeScan(/*new UUID[]{UUID.fromString("B0702880-A295-A8AB-F734-031A98A512DE")},*/ this);
         } else {
             mScanning = false;
             BluetoothAdapter.getDefaultAdapter().stopLeScan(this);
@@ -136,7 +135,9 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
 
     @Override
     public void onLeScan(BluetoothDevice bluetoothDevice, int rssi, byte[] bytes) {
-        Log.d("beacon", "found a beacon!!!! " + bytes.length + " bytes");
+        if (bytes[0] == 0x02 && bytes[1] == 15) {
+        }
+        Log.d("beacon", Util.bytesToHex(bytes));
     }
 
     /**
