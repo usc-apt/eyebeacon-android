@@ -28,9 +28,9 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
     private static final String TAG = "BeaconMonitor";
     private static final String uuid = "0f4228c0-95ff-11e3-a5e2-0800200c9a66";
 
-    private static final long SCAN_PERIOD = 20000; //give up after 10 seconds
+    private static final long SCAN_PERIOD = 15000; //give up after 10 seconds
 
-    private static final long SCAN_INTERVAL = 30000; //30 seconds between scan starts
+    private static final long SCAN_INTERVAL = 45000; //30 seconds between scan starts
 
     private static Region region = new Region(uuid, null, null, null);
 
@@ -51,33 +51,38 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + "," + closestBeacon.getMinor() + " " + closestBeacon.getAccuracy() + "m away");
+                if (closestBeacon != null) {
+                    Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + "," + closestBeacon.getMinor() + " " + closestBeacon.getAccuracy() + "m away");
 
 
-                Notification notif = new Notification.Builder(BeaconMonitor.this)
-                        .setContentTitle("Beacon nearby")
-                        .setContentText(closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + (double) Math.round(closestBeacon.getAccuracy() * 100) / 100d + "m")
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .build();
-                NotificationManager notificationMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    Notification notif = new Notification.Builder(BeaconMonitor.this)
+                            .setContentTitle("Beacon nearby")
+                            .setContentText(closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + (double) Math.round(closestBeacon.getAccuracy() * 100) / 100d + "m")
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .build();
+                    NotificationManager notificationMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-                Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
+                    Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
 
-                final Map data = new HashMap();
-                data.put("title", "EyeBeacon");
-                data.put("body", "Beacon nearby, look up");
-                final JSONObject jsonData = new JSONObject(data);
-                final String notificationData = new JSONArray().put(jsonData).toString();
+                    final Map data = new HashMap();
+                    data.put("title", "EyeBeacon");
+                    data.put("body", "Beacon nearby, look up");
+                    final JSONObject jsonData = new JSONObject(data);
+                    final String notificationData = new JSONArray().put(jsonData).toString();
 
-                i.putExtra("messageType", "PEBBLE_ALERT");
-                i.putExtra("sender", "EyeBeacon");
-                i.putExtra("notificationData", notificationData);
-                Log.i(TAG, "Sending notification to pebble");
+                    i.putExtra("messageType", "PEBBLE_ALERT");
+                    i.putExtra("sender", "EyeBeacon");
+                    i.putExtra("notificationData", notificationData);
+                    Log.i(TAG, "Sending notification to pebble");
 
-                //sendBroadcast(i);
+                    //sendBroadcast(i);
 
-                notificationMgr.notify(3309, notif);
+                    notificationMgr.notify(3309, notif);
 
+                    closestBeacon = null;
+                } else {
+                    Log.w(TAG, "no beacon found");
+                }
 
                 BluetoothAdapter.getDefaultAdapter().stopLeScan(BeaconMonitor.this);
             }
