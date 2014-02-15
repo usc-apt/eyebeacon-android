@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
@@ -40,9 +41,7 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
 
     private Handler mHandler = new Handler();
 
-    private IBeacon closestBeacon = null;
-
-    private List<IBeacon> beaconsScannedAlready = new ArrayList<IBeacon>();
+    private HashMap<IBeacon, List<Double>> beaconDistances = new HashMap<IBeacon, List<Double>>();
 
     public BeaconMonitor() {
         this("BeaconMonitor");
@@ -57,8 +56,25 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //found a beacon and its less than 3 meters away
-                if (closestBeacon != null && closestBeacon.getAccuracy() < 3) {
+                IBeacon closestBeacon = null;
+                double closestDistance = Double.MAX_VALUE;
+                HashMap<IBeacon, Double> beaconAverages = new HashMap<IBeacon, Double>();
+                for (Map.Entry<IBeacon, List<Double>> entry : beaconDistances.entrySet()) {
+                    double avg = 0;
+                    for (Double d : entry.getValue())
+                        avg += d;
+                    avg /= entry.getValue().size();
+                    beaconAverages.put(entry.getKey(), avg);
+                    Log.i(TAG, entry.getKey().getMajor() + ":" + entry.getKey().getMinor() + " ≈ " + avg + "m");
+                }
+                for (Map.Entry<IBeacon, Double> entry : beaconAverages.entrySet()) {
+                    if (closestBeacon == null || entry.getValue() < closestDistance) {
+                        closestBeacon = entry.getKey();
+                        closestDistance = entry.getValue();
+                    }
+                }
+                //found a beacon and it is "close"
+                if (closestBeacon != null && closestBeacon.getProximity() <= IBeacon.PROXIMITY_NEAR) {
                     Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + closestBeacon.getAccuracy() + "m away");
 
                     if (closestBeacon.equals(lastBeaconScanned)) {
@@ -86,6 +102,14 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
                     }
                 } else {
                     Log.w(TAG, "no beacon found");
+                    Notification notif = new Notification.Builder(BeaconMonitor.this)
+                            .setContentTitle("No beacons found")
+                            .setContentText("Searching...")
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .build();
+                    NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    notificationMgr.notify(3309, notif);
                 }
 
                 BluetoothAdapter.getDefaultAdapter().stopLeScan(BeaconMonitor.this);
@@ -99,7 +123,7 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent");
 
-        beaconsScannedAlready.clear();
+        beaconDistances.clear();
         //do the le scan
         scan();
 
@@ -114,15 +138,12 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
     @Override
     public void onLeScan(BluetoothDevice bluetoothDevice, int rssi, byte[] scanData) {
         IBeacon beacon = IBeacon.fromScanData(scanData, rssi);
-        if (region.matchesIBeacon(beacon) && closestBeacon == null) {
-            closestBeacon = beacon;
-            Log.i(TAG, "new closest beacon " + beacon.getMajor() + ":" + beacon.getMinor());
-            beaconsScannedAlready.add(beacon);
-        }
-        if (region.matchesIBeacon(beacon) && beacon.getAccuracy() < closestBeacon.getAccuracy() && !beacon.equals(closestBeacon) && !beaconsScannedAlready.contains(beacon)) {
-            closestBeacon = beacon;
-            Log.i(TAG, "new closest beacon " + beacon.getMajor() + ":" + beacon.getMinor());
-            beaconsScannedAlready.add(beacon);
+        if (region.matchesIBeacon(beacon)) {
+            Log.i(TAG, "looking at " + beacon.getMajor() + ":" + beacon.getMinor() + " " + beacon.getAccuracy() + "m");
+
+            if (!beaconDistances.containsKey(beacon))
+                beaconDistances.put(beacon, new ArrayList<Double>());
+            beaconDistances.get(beacon).add(beacon.getAccuracy());
         }
     }
 }

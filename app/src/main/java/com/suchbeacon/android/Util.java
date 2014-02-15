@@ -45,7 +45,8 @@ public class Util {
                     String account = PreferenceManager.getDefaultSharedPreferences(context).getString("account", null);
                     Log.i("cloud", "account = " + account);
                     String token = GoogleAuthUtil.getToken(context, account, Constants.SCOPE);
-                    String url = "http://suchbeacon.com/content?majorId=" + major + "&minorId=" + minor + "&accessToken=" + token;
+                    //TODO switch this back to actually provide an auth token
+                    String url = "http://suchbeacon.com/content?majorId=" + major + "&minorId=" + minor + "&accessToken=";// + token;
                     Log.i("cloud", "url = " + url);
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                     Log.i("cloud", "response code = " + connection.getResponseCode());
@@ -62,7 +63,7 @@ public class Util {
 
                     Notification notif = new Notification.Builder(context)
                             .setContentTitle(name)
-                            .setContentText("Beacon nearby "+major+":"+minor)
+                            .setContentText("Beacon nearby " + major + ":" + minor)
                             .setSmallIcon(R.drawable.ic_launcher)
                             .build();
                     NotificationManager notificationMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
