@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
+import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,7 +51,11 @@ public class MainActivity extends Activity {
                 @Override
                 protected Void doInBackground(Void... voids) {
                     try {
-                        Log.d("token", GoogleAuthUtil.getToken(MainActivity.this, account, Constants.SCOPE));
+                        String token = GoogleAuthUtil.getToken(MainActivity.this, account, Constants.SCOPE);
+                        Log.d("token", token);
+                        Looper.prepare();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        clipboard.setText(token);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (UserRecoverableAuthException e) {
