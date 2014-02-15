@@ -2,6 +2,7 @@ package com.suchbeacon.android;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
@@ -34,10 +35,13 @@ public class Util {
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    String token = GoogleAuthUtil.getToken(context, context.getSharedPreferences("MainActivity", Context.MODE_PRIVATE).getString("account", null), Constants.SCOPE);
+                    String account = PreferenceManager.getDefaultSharedPreferences(context).getString("account", null);
+                    Log.i("cloud", "account = " + account);
+                    String token = GoogleAuthUtil.getToken(context, account, Constants.SCOPE);
                     String url = "http://suchbeacon.com/content?majorId=" + major + "&minorId=" + minor + "&accessToken=" + token;
+                    Log.i("cloud", "url = " + url);
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-                    Log.i("response code", "" + connection.getResponseCode());
+                    Log.i("cloud", "response code = " + connection.getResponseCode());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (GoogleAuthException e) {

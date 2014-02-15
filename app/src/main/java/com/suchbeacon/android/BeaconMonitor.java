@@ -88,6 +88,8 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
 
                         notificationMgr.notify(3309, notif);
 
+                        Util.toTheCloudAsync(BeaconMonitor.this, closestBeacon.getMajor(), closestBeacon.getMinor());
+
                         lastBeaconScanned = closestBeacon;
                         closestBeacon = null;
                     }
