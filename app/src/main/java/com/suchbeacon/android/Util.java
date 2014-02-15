@@ -1,5 +1,7 @@
 package com.suchbeacon.android;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -8,7 +10,12 @@ import android.util.Log;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -42,9 +49,30 @@ public class Util {
                     Log.i("cloud", "url = " + url);
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                     Log.i("cloud", "response code = " + connection.getResponseCode());
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String data = "";
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        data += line;
+                    }
+
+                    JSONObject json = new JSONObject(new JSONObject(data).getString("data"));
+                    String name = json.getString("name");
+
+                    Notification notif = new Notification.Builder(context)
+                            .setContentTitle(name)
+                            .setContentText("Beacon nearby "+major+":"+minor)
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .build();
+                    NotificationManager notificationMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    notificationMgr.notify(3309, notif);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (GoogleAuthException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return null;

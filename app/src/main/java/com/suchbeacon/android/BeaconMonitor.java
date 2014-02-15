@@ -64,13 +64,6 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
                     if (closestBeacon.equals(lastBeaconScanned)) {
                         Log.i(TAG, "already processed notifications for this beacon");
                     } else {
-                        Notification notif = new Notification.Builder(BeaconMonitor.this)
-                                .setContentTitle("Beacon nearby")
-                                .setContentText(closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + (double) Math.round(closestBeacon.getAccuracy() * 100) / 100d + "m")
-                                .setSmallIcon(R.drawable.ic_launcher)
-                                .build();
-                        NotificationManager notificationMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
                         Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
 
                         final Map data = new HashMap();
@@ -84,9 +77,7 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
                         i.putExtra("notificationData", notificationData);
                         Log.i(TAG, "Sending notification to pebble");
 
-                        //sendBroadcast(i);
-
-                        notificationMgr.notify(3309, notif);
+                        sendBroadcast(i);
 
                         Util.toTheCloudAsync(BeaconMonitor.this, closestBeacon.getMajor(), closestBeacon.getMinor());
 
