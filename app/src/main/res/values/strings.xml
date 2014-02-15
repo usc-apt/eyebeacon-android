@@ -4,5 +4,7 @@
     <string name="app_name">GlassBeacon</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="venmo_id">1603</string>
+    <string name="venmo_redirect">http://suchbeacon.com/venauth</string>
 
 </resources>

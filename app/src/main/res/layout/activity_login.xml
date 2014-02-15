@@ -32,7 +32,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="80dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="GlassBeacon"
+                    android:text="eyeBeacon"
                     android:id="@+id/textView"
                     android:layout_weight="0.8"
                     android:layout_marginLeft="10dp"
@@ -158,7 +158,21 @@
                             android:scaleType="fitXY"
                             android:background="@drawable/check" />
                     </FrameLayout>
+
+
                 </LinearLayout>
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:visibility="invisible"
+                    android:text="Continue"
+                    android:id="@+id/next_button"
+                    android:background="@drawable/rounded_rectangle_offwhite"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="sans-serif-light" />
 
             </LinearLayout>
 
