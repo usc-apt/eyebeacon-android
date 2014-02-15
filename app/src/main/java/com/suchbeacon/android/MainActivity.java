@@ -3,9 +3,12 @@ package com.suchbeacon.android;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Fragment;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,8 +22,9 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 
 import java.io.IOException;
+import java.util.UUID;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements BluetoothAdapter.LeScanCallback {
 
     private static final int ACCOUNT_PICK_REQUEST_CODE = 1;
     private static final int REQUEST_AUTHORIZATION = 2;
@@ -29,6 +33,10 @@ public class MainActivity extends Activity {
     //private static final String SCOPE_SCOPES = "api_scope:https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/userinfo.profile";
     //private static final String SCOPE = SCOPE_AUDIENCE + ":" + SCOPE_SCOPES;
     private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location";
+
+    private Handler mHandler = new Handler();
+    private boolean mScanning = false;
+    private long SCAN_PERIOD = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +54,10 @@ public class MainActivity extends Activity {
             Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE},
                     false, null, null, null, null);
             startActivityForResult(intent, ACCOUNT_PICK_REQUEST_CODE);
+        } else {
         }
+
+        scan(true);
     }
 
     @Override
@@ -54,7 +65,7 @@ public class MainActivity extends Activity {
         if (requestCode == ACCOUNT_PICK_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                getPreferences(MODE_PRIVATE).edit().putString("account", accountName);
+                getPreferences(MODE_PRIVATE).edit().putString("account", accountName).commit();
 
                 new AsyncTask<Void, Void, Void>() {
 
@@ -102,6 +113,30 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void scan(final boolean enable) {
+        if (enable) {
+            // Stops scanning after a pre-defined scan period.
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mScanning = false;
+                    BluetoothAdapter.getDefaultAdapter().stopLeScan(MainActivity.this);
+                }
+            }, SCAN_PERIOD);
+
+            mScanning = true;
+            BluetoothAdapter.getDefaultAdapter().startLeScan(new UUID[]{UUID.fromString("B0702880-A295-A8AB-F734-031A98A512DE")}, this);
+        } else {
+            mScanning = false;
+            BluetoothAdapter.getDefaultAdapter().stopLeScan(this);
+        }
+    }
+
+    @Override
+    public void onLeScan(BluetoothDevice bluetoothDevice, int rssi, byte[] bytes) {
+        Log.d("beacon", "found a beacon!!!! " + bytes.length + " bytes");
     }
 
     /**
