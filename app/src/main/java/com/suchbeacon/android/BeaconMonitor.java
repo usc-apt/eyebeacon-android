@@ -17,7 +17,9 @@ import com.radiusnetworks.ibeacon.Region;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +40,8 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
 
     private IBeacon closestBeacon = null;
 
+    private List<IBeacon> beaconsScannedAlready = new ArrayList<IBeacon>();
+
     public BeaconMonitor() {
         this("BeaconMonitor");
     }
@@ -54,7 +58,6 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
                 //found a beacon and its less than 3 meters away
                 if (closestBeacon != null && closestBeacon.getAccuracy() < 3) {
                     Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + closestBeacon.getAccuracy() + "m away");
-
 
                     Notification notif = new Notification.Builder(BeaconMonitor.this)
                             .setContentTitle("Beacon nearby")
@@ -96,6 +99,7 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent");
 
+        beaconsScannedAlready.clear();
         //do the le scan
         scan();
 
@@ -104,6 +108,7 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
         Intent serviceIntent = new Intent(this, BeaconMonitor.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 7824, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + SCAN_INTERVAL, pendingIntent);
+        Log.i(TAG, "scheduled task to run again");
     }
 
     @Override
@@ -112,10 +117,12 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
         if (region.matchesIBeacon(beacon) && closestBeacon == null) {
             closestBeacon = beacon;
             Log.i(TAG, "new closest beacon " + beacon.getMajor() + ":" + beacon.getMinor());
+            beaconsScannedAlready.add(beacon);
         }
-        if (region.matchesIBeacon(beacon) && beacon.getAccuracy() < closestBeacon.getAccuracy()) {
+        if (region.matchesIBeacon(beacon) && beacon.getAccuracy() < closestBeacon.getAccuracy() && !beacon.equals(closestBeacon) && !beaconsScannedAlready.contains(beacon)) {
             closestBeacon = beacon;
             Log.i(TAG, "new closest beacon " + beacon.getMajor() + ":" + beacon.getMinor());
+            beaconsScannedAlready.add(beacon);
         }
     }
 }
