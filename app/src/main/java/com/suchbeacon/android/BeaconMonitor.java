@@ -2,6 +2,8 @@ package com.suchbeacon.android;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -28,6 +30,8 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
 
     private Handler mHandler = new Handler();
 
+    private boolean foundBeacon = false;
+
     public BeaconMonitor() {
         this("BeaconMonitor");
     }
@@ -41,6 +45,8 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (!foundBeacon)
+                    ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(3309);
                 BluetoothAdapter.getDefaultAdapter().stopLeScan(BeaconMonitor.this);
             }
         }, SCAN_PERIOD);
@@ -52,6 +58,7 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent");
 
+        foundBeacon = false;
         //do the le scan
         scan();
 
@@ -67,6 +74,16 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
         IBeacon beacon = IBeacon.fromScanData(scanData, rssi);
         if (region.matchesIBeacon(beacon) && beacon.getAccuracy() < 3) {
             Log.i(TAG, "beacon close = " + beacon.getMajor() + "," + beacon.getMinor() + " " + beacon.getAccuracy() + "m away");
+
+            Notification notif = new Notification.Builder(this)
+                    .setContentTitle("Beacon nearby")
+                    .setContentText(beacon.getMajor() + ":" + beacon.getMinor() + " " + (double) Math.round(beacon.getAccuracy() * 100) / 100d + "m")
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .build();
+            NotificationManager notificationMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            notificationMgr.notify(3309, notif);
+            foundBeacon = true;
 
             //we found a beacon right next to us, stop the scan now
             BluetoothAdapter.getDefaultAdapter().stopLeScan(this);
