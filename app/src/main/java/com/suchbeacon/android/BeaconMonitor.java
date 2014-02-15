@@ -15,9 +15,6 @@ import android.util.Log;
 import com.radiusnetworks.ibeacon.IBeacon;
 import com.radiusnetworks.ibeacon.Region;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,10 +84,12 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
                     }
                 } else {
                     Log.w(TAG, "no beacon found");
+
                     Notification notif = new Notification.Builder(BeaconMonitor.this)
                             .setContentTitle("No beacons found")
                             .setContentText("Searching...")
                             .setSmallIcon(R.drawable.ic_launcher)
+                            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))
                             .build();
                     NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -114,10 +113,14 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
 
         //start the activity over again
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent serviceIntent = new Intent(this, BeaconMonitor.class);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 7824, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = Util.getScanPendingIntent(this);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + SCAN_INTERVAL, pendingIntent);
         Log.i(TAG, "scheduled task to run again");
+    }
+
+    @Override
+    public void onDestroy() {
+        BluetoothAdapter.getDefaultAdapter().stopLeScan(this);
     }
 
     @Override

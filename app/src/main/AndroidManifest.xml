@@ -36,7 +36,11 @@
         <service
             android:name=".BeaconMonitor"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <receiver
+            android:name=".StopServiceReceiver"
+            android:enabled="true" />
 
 
         <!-- Radius Networks iBeacon stuff -->
