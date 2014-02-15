@@ -43,12 +43,28 @@ public class MainActivity extends Activity {
                     .commit();
         }
 
-        String account = getPreferences(MODE_PRIVATE).getString("account", null);
+        final String account = getPreferences(MODE_PRIVATE).getString("account", null);
         if (account == null) {
             Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE},
                     false, null, null, null, null);
             startActivityForResult(intent, ACCOUNT_PICK_REQUEST_CODE);
         } else {
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    try {
+                        Log.d("token", GoogleAuthUtil.getToken(MainActivity.this, account, SCOPE));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (UserRecoverableAuthException e) {
+                        startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+                    } catch (GoogleAuthException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute();
         }
 
         Intent serviceIntent = new Intent(this, BeaconMonitor.class);

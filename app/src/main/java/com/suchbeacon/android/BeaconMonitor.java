@@ -14,6 +14,13 @@ import android.util.Log;
 import com.radiusnetworks.ibeacon.IBeacon;
 import com.radiusnetworks.ibeacon.Region;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 /**
  * Created by vmagro on 2/15/14.
  */
@@ -81,6 +88,21 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
                     .setSmallIcon(R.drawable.ic_launcher)
                     .build();
             NotificationManager notificationMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
+
+            final Map data = new HashMap();
+            data.put("title", "EyeBeacon");
+            data.put("body", "Beacon nearby, look up");
+            final JSONObject jsonData = new JSONObject(data);
+            final String notificationData = new JSONArray().put(jsonData).toString();
+
+            i.putExtra("messageType", "PEBBLE_ALERT");
+            i.putExtra("sender", "EyeBeacon");
+            i.putExtra("notificationData", notificationData);
+            Log.i(TAG, "Sending notification to pebble");
+
+            sendBroadcast(i);
 
             notificationMgr.notify(3309, notif);
             foundBeacon = true;
