@@ -4,10 +4,12 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.ClipboardManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,10 +31,16 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
 
+    /*Shared prefs*/
+    private static SharedPreferences sharedPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*Get shared prefs*/
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -40,10 +48,9 @@ public class MainActivity extends Activity {
                     .commit();
         }
 
-        final String account = getPreferences(MODE_PRIVATE).getString("account", null);
+        String account = sharedPrefs.getString("account", null);
         if (account == null) {
-            Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE},
-                    false, null, null, null, null);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, ACCOUNT_PICK_REQUEST_CODE);
         } else {
             new AsyncTask<Void, Void, Void>() {

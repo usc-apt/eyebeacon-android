@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GlassBeacon.iml" filepath="$PROJECT_DIR$/GlassBeacon.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/suchbeacon-android.iml" filepath="$PROJECT_DIR$/suchbeacon-android.iml" />
     </modules>
   </component>
 </project>
