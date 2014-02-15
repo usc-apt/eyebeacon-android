@@ -3,12 +3,10 @@ package com.suchbeacon.android;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Fragment;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,10 +18,14 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
+import com.radiusnetworks.ibeacon.IBeaconConsumer;
+import com.radiusnetworks.ibeacon.IBeaconManager;
+import com.radiusnetworks.ibeacon.MonitorNotifier;
+import com.radiusnetworks.ibeacon.Region;
 
 import java.io.IOException;
 
-public class MainActivity extends Activity implements BluetoothAdapter.LeScanCallback {
+public class MainActivity extends Activity implements IBeaconConsumer, MonitorNotifier {
 
     private static final int ACCOUNT_PICK_REQUEST_CODE = 1;
     private static final int REQUEST_AUTHORIZATION = 2;
@@ -33,9 +35,9 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     //private static final String SCOPE = SCOPE_AUDIENCE + ":" + SCOPE_SCOPES;
     private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location";
 
-    private Handler mHandler = new Handler();
-    private boolean mScanning = false;
-    private long SCAN_PERIOD = 10000;
+    private static final String uuid = "0f4228c0-95ff-11e3-a5e2-0800200c9a66";
+
+    private IBeaconManager iBeaconManager = IBeaconManager.getInstanceForApplication(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         } else {
         }
 
-        scan(true);
+        iBeaconManager.bind(this);
     }
 
     @Override
@@ -90,10 +92,22 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onDestroy() {
+        super.onDestroy();
+        iBeaconManager.unBind(this);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (iBeaconManager.isBound(this)) iBeaconManager.setBackgroundMode(this, true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (iBeaconManager.isBound(this)) iBeaconManager.setBackgroundMode(this, false);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,30 +128,29 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         return super.onOptionsItemSelected(item);
     }
 
-    private void scan(final boolean enable) {
-        if (enable) {
-            // Stops scanning after a pre-defined scan period.
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScanning = false;
-                    BluetoothAdapter.getDefaultAdapter().stopLeScan(MainActivity.this);
-                }
-            }, SCAN_PERIOD);
-
-            mScanning = true;
-            BluetoothAdapter.getDefaultAdapter().startLeScan(/*new UUID[]{UUID.fromString("B0702880-A295-A8AB-F734-031A98A512DE")},*/ this);
-        } else {
-            mScanning = false;
-            BluetoothAdapter.getDefaultAdapter().stopLeScan(this);
+    @Override
+    public void onIBeaconServiceConnect() {
+        iBeaconManager.setMonitorNotifier(this);
+        try {
+            iBeaconManager.startMonitoringBeaconsInRegion(new Region(uuid, null, null, null));
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void onLeScan(BluetoothDevice bluetoothDevice, int rssi, byte[] bytes) {
-        if (bytes[0] == 0x02 && bytes[1] == 15) {
-        }
-        Log.d("beacon", Util.bytesToHex(bytes));
+    public void didEnterRegion(Region region) {
+        Log.d("enter", region.getMajor() + "," + region.getMinor() + "," + region.getUniqueId());
+    }
+
+    @Override
+    public void didExitRegion(Region region) {
+        Log.d("exit", region.getMajor() + "," + region.getMinor());
+    }
+
+    @Override
+    public void didDetermineStateForRegion(int i, Region region) {
+
     }
 
     /**

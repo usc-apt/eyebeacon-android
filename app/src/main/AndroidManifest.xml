@@ -26,6 +26,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <!-- Radius Networks iBeacon stuff -->
+        <service
+            android:enabled="true"
+            android:exported="true"
+            android:isolatedProcess="false"
+            android:label="iBeacon"
+            android:name="com.radiusnetworks.ibeacon.service.IBeaconService"></service>
+
+        <service
+            android:enabled="true"
+            android:name="com.radiusnetworks.ibeacon.IBeaconIntentProcessor"></service>
+
+        <!-- End iBeacon services -->
     </application>
 
 </manifest>
