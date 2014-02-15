@@ -27,6 +27,11 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".BeaconMonitor"
+            android:enabled="true"
+            android:exported="true"></service>
+
 
         <!-- Radius Networks iBeacon stuff -->
         <service

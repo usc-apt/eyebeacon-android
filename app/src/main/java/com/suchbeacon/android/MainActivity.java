@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,16 +17,10 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
-import com.radiusnetworks.ibeacon.IBeacon;
-import com.radiusnetworks.ibeacon.IBeaconConsumer;
-import com.radiusnetworks.ibeacon.IBeaconManager;
-import com.radiusnetworks.ibeacon.RangeNotifier;
-import com.radiusnetworks.ibeacon.Region;
 
 import java.io.IOException;
-import java.util.Collection;
 
-public class MainActivity extends Activity implements IBeaconConsumer, RangeNotifier {
+public class MainActivity extends Activity {
 
     private static final int ACCOUNT_PICK_REQUEST_CODE = 1;
     private static final int REQUEST_AUTHORIZATION = 2;
@@ -37,11 +30,7 @@ public class MainActivity extends Activity implements IBeaconConsumer, RangeNoti
     //private static final String SCOPE = SCOPE_AUDIENCE + ":" + SCOPE_SCOPES;
     private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location";
 
-    private static final String uuid = "0f4228c0-95ff-11e3-a5e2-0800200c9a66";
-
     private static final String TAG = "MainActivity";
-
-    private IBeaconManager iBeaconManager = IBeaconManager.getInstanceForApplication(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +51,8 @@ public class MainActivity extends Activity implements IBeaconConsumer, RangeNoti
         } else {
         }
 
-        iBeaconManager.bind(this);
+        Intent serviceIntent = new Intent(this, BeaconMonitor.class);
+        startService(serviceIntent);
     }
 
     @Override
@@ -96,24 +86,6 @@ public class MainActivity extends Activity implements IBeaconConsumer, RangeNoti
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        iBeaconManager.unBind(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (iBeaconManager.isBound(this)) iBeaconManager.setBackgroundMode(this, true);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (iBeaconManager.isBound(this)) iBeaconManager.setBackgroundMode(this, false);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -130,30 +102,6 @@ public class MainActivity extends Activity implements IBeaconConsumer, RangeNoti
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onIBeaconServiceConnect() {
-        iBeaconManager.setRangeNotifier(this);
-        try {
-            iBeaconManager.startRangingBeaconsInRegion(new Region(uuid, null, null, null));
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void didRangeBeaconsInRegion(Collection<IBeacon> iBeacons, Region region) {
-        IBeacon closestBeacon = null;
-        for (IBeacon beacon : iBeacons) {
-            if (closestBeacon == null || beacon.getAccuracy() < closestBeacon.getAccuracy())
-                closestBeacon = beacon;
-        }
-        if (closestBeacon != null) {
-            Log.i(TAG, "closest beacon = " + closestBeacon.getMajor() + "," + closestBeacon.getMinor());
-        } else {
-            Log.i(TAG, "no beacon detected");
-        }
     }
 
     /**

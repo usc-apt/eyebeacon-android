@@ -110,7 +110,7 @@ public class IBeaconManager {
     /**
      * set to true if you want to see debug messages associated with this library
      */
-    public static boolean LOG_DEBUG = true;
+    public static boolean LOG_DEBUG = false;
 
 
     /**
