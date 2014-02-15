@@ -36,6 +36,8 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
 
     private static Region region = new Region(uuid, null, null, null);
 
+    private static IBeacon lastBeaconScanned = null;
+
     private Handler mHandler = new Handler();
 
     private IBeacon closestBeacon = null;
@@ -59,31 +61,36 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
                 if (closestBeacon != null && closestBeacon.getAccuracy() < 3) {
                     Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + closestBeacon.getAccuracy() + "m away");
 
-                    Notification notif = new Notification.Builder(BeaconMonitor.this)
-                            .setContentTitle("Beacon nearby")
-                            .setContentText(closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + (double) Math.round(closestBeacon.getAccuracy() * 100) / 100d + "m")
-                            .setSmallIcon(R.drawable.ic_launcher)
-                            .build();
-                    NotificationManager notificationMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    if (closestBeacon.equals(lastBeaconScanned)) {
+                        Log.i(TAG, "already processed notifications for this beacon");
+                    } else {
+                        Notification notif = new Notification.Builder(BeaconMonitor.this)
+                                .setContentTitle("Beacon nearby")
+                                .setContentText(closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + (double) Math.round(closestBeacon.getAccuracy() * 100) / 100d + "m")
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .build();
+                        NotificationManager notificationMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-                    Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
+                        Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
 
-                    final Map data = new HashMap();
-                    data.put("title", "EyeBeacon");
-                    data.put("body", "Beacon nearby, look up");
-                    final JSONObject jsonData = new JSONObject(data);
-                    final String notificationData = new JSONArray().put(jsonData).toString();
+                        final Map data = new HashMap();
+                        data.put("title", "EyeBeacon");
+                        data.put("body", "Beacon nearby, look up");
+                        final JSONObject jsonData = new JSONObject(data);
+                        final String notificationData = new JSONArray().put(jsonData).toString();
 
-                    i.putExtra("messageType", "PEBBLE_ALERT");
-                    i.putExtra("sender", "EyeBeacon");
-                    i.putExtra("notificationData", notificationData);
-                    Log.i(TAG, "Sending notification to pebble");
+                        i.putExtra("messageType", "PEBBLE_ALERT");
+                        i.putExtra("sender", "EyeBeacon");
+                        i.putExtra("notificationData", notificationData);
+                        Log.i(TAG, "Sending notification to pebble");
 
-                    //sendBroadcast(i);
+                        //sendBroadcast(i);
 
-                    notificationMgr.notify(3309, notif);
+                        notificationMgr.notify(3309, notif);
 
-                    closestBeacon = null;
+                        lastBeaconScanned = closestBeacon;
+                        closestBeacon = null;
+                    }
                 } else {
                     Log.w(TAG, "no beacon found");
                 }
