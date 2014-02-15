@@ -80,21 +80,6 @@ public class BeaconMonitor extends IntentService implements BluetoothAdapter.LeS
                     if (closestBeacon.equals(lastBeaconScanned)) {
                         Log.i(TAG, "already processed notifications for this beacon");
                     } else {
-                        Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
-
-                        final Map data = new HashMap();
-                        data.put("title", "EyeBeacon");
-                        data.put("body", "Beacon nearby, look up");
-                        final JSONObject jsonData = new JSONObject(data);
-                        final String notificationData = new JSONArray().put(jsonData).toString();
-
-                        i.putExtra("messageType", "PEBBLE_ALERT");
-                        i.putExtra("sender", "EyeBeacon");
-                        i.putExtra("notificationData", notificationData);
-                        Log.i(TAG, "Sending notification to pebble");
-
-                        sendBroadcast(i);
-
                         Util.toTheCloudAsync(BeaconMonitor.this, closestBeacon.getMajor(), closestBeacon.getMinor());
 
                         lastBeaconScanned = closestBeacon;

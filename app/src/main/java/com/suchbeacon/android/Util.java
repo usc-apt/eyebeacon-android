@@ -3,6 +3,7 @@ package com.suchbeacon.android;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.util.Log;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by vmagro on 2/15/14.
@@ -57,7 +61,7 @@ public class Util {
                         data += line;
                     }
 
-                    JSONObject json = new JSONObject(new JSONObject(data).getString("data"));
+                    JSONObject json = new JSONObject(data).getJSONObject("data");
                     String name = json.getString("name");
 
                     Notification notif = new Notification.Builder(context)
@@ -68,6 +72,21 @@ public class Util {
                     NotificationManager notificationMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     notificationMgr.notify(3309, notif);
+
+                    Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
+
+                    final Map pebbleData = new HashMap();
+                    pebbleData.put("title", "EyeBeacon");
+                    pebbleData.put("body", name);
+                    final JSONObject jsonData = new JSONObject(data);
+                    final String notificationData = new JSONArray().put(jsonData).toString();
+
+                    i.putExtra("messageType", "PEBBLE_ALERT");
+                    i.putExtra("sender", "EyeBeacon");
+                    i.putExtra("notificationData", notificationData);
+                    Log.i("pebble", "Sending notification to pebble");
+
+                    context.sendBroadcast(i);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (GoogleAuthException e) {
