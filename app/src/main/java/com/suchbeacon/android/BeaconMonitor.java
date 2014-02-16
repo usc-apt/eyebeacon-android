@@ -125,6 +125,7 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
         BluetoothAdapter.getDefaultAdapter().stopLeScan(this);
+        mHandler.removeCallbacks(scanRunnable);
     }
 
     @Override
