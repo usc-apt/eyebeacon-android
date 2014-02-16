@@ -2,6 +2,7 @@ package com.suchbeacon.android;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -16,6 +17,7 @@ import android.util.Log;
 
 import com.radiusnetworks.ibeacon.IBeacon;
 import com.radiusnetworks.ibeacon.Region;
+import com.suchbeacon.android.activities.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,10 +92,12 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
                             .setContentTitle("eyeBeacon")
                             .setContentText("Searching...")
                             .setSmallIcon(R.drawable.notif_small)
-                            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))
+                            /*.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))*/
                             .build();
+                    Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+                    notif.contentIntent = contentIntent;
                     NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
                     notificationMgr.notify(3309, notif);
                 }
 
@@ -123,10 +127,12 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
                 .setContentTitle("eyeBeacon")
                 .setContentText("Searching...")
                 .setSmallIcon(R.drawable.notif_small)
-                .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))
+                /*.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))*/
                 .build();
+        Intent notificationIntent = new Intent(this.getApplicationContext(), MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this.getApplicationContext(), 0, notificationIntent, 0);
+        notif.contentIntent = contentIntent;
         NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         notificationMgr.notify(3309, notif);
 
         // Get the HandlerThread's Looper and use it for our Handler
