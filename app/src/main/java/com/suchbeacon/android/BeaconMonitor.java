@@ -84,7 +84,7 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
                     Notification notif = new Notification.Builder(BeaconMonitor.this)
                             .setContentTitle("No beacons found")
                             .setContentText("Searching...")
-                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setSmallIcon(R.drawable.notif_small)
                             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))
                             .build();
                     NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

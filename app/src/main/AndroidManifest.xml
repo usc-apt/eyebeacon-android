@@ -56,6 +56,16 @@
             android:name="com.radiusnetworks.ibeacon.IBeaconIntentProcessor"></service>
 
         <!-- End iBeacon services -->
+
+        <receiver android:name=".InfoControlWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="SERVICE_STOP_START_BUTTON" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget" />
+        </receiver>
+
     </application>
 
 </manifest>

@@ -55,7 +55,7 @@ public class Util {
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                     Log.i("cloud", "response code = " + connection.getResponseCode());
 
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                     BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     String data = "";
                     String line;
                     while ((line = reader.readLine()) != null) {
@@ -68,7 +68,7 @@ public class Util {
                     Notification notif = new Notification.Builder(context)
                             .setContentTitle(name)
                             .setContentText("Beacon nearby " + major + ":" + minor)
-                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setSmallIcon(R.drawable.notif_small)
                             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(context))
                             .build();
                     NotificationManager notificationMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

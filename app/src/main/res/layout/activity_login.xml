@@ -56,6 +56,17 @@
                 android:layout_gravity="top"
                 android:layout_marginTop="90dp" />
 
+            <ImageView
+                android:id="@+id/banner"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:src="@drawable/eyebeacon_white"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:layout_marginBottom="100dp"
+                />
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
