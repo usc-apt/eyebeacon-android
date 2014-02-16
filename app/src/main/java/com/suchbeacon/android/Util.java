@@ -50,7 +50,7 @@ public class Util {
                     String account = PreferenceManager.getDefaultSharedPreferences(context).getString("account", null);
                     Log.i("cloud", "account = " + account);
                     String token = GoogleAuthUtil.getToken(context, account, Constants.SCOPE);
-                    String url = "http://suchbeacon.com/content?majorId=" + major + "&minorId=" + minor + "&accessToken=" + token;
+                    String url = "http://suchbeacon.com/content?majorId=" + major + "&minorId=" + minor + "&email=" + account + "&accessToken=" + token;
                     Log.i("cloud", "url = " + url);
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                     Log.i("cloud", "response code = " + connection.getResponseCode());
