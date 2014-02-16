@@ -68,7 +68,7 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
                     }
                 }
                 //found a beacon and it is "close"
-                if (closestBeacon != null && closestBeacon.getAccuracy() <= distanceThreshold) {
+                if (closestBeacon != null && closestDistance <= distanceThreshold) {
                     Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + closestDistance + "m away");
 
                     if (closestBeacon.equals(lastBeaconScanned)) {
