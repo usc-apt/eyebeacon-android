@@ -31,9 +31,9 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
     private static final String uuid = "0f4228c0-95ff-11e3-a5e2-0800200c9a66";
     private static final double distanceThreshold = 4;
 
-    private static final long SCAN_PERIOD = 15000; //give up after 10 seconds
+    private static final long SCAN_PERIOD = 10000; //give up after 10 seconds
 
-    private static final long SCAN_INTERVAL = 45000; //30 seconds between scan starts
+    private static final long SCAN_INTERVAL = 11000; //30 seconds between scan starts
 
     private static Region region = new Region(uuid, null, null, null);
 
@@ -42,6 +42,8 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
     private Handler mHandler;
 
     private HashMap<IBeacon, List<Double>> beaconDistances = new HashMap<IBeacon, List<Double>>();
+
+    private long lastTime = System.currentTimeMillis();
 
     private void scan() {
         // Stops scanning after a pre-defined scan period.
@@ -80,7 +82,7 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
                 } else {
                     if (closestBeacon == null)
                         Log.w(TAG, "no beacon found, closestbeacon null");
-                    else if(closestBeacon.getAccuracy() > distanceThreshold)
+                    else if (closestBeacon.getAccuracy() > distanceThreshold)
                         Log.w(TAG, "no beacon found, beacon not near");
 
                     Notification notif = new Notification.Builder(BeaconMonitor.this)
@@ -95,6 +97,11 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
                     NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationMgr.notify(3309, notif);
                 }
+
+                Log.d(TAG, "elapsed = " + (double) (System.currentTimeMillis() - lastTime) / 1000d + "s");
+                lastTime = System.currentTimeMillis();
+
+                beaconDistances.clear();
 
                 BluetoothAdapter.getDefaultAdapter().stopLeScan(BeaconMonitor.this);
             }
