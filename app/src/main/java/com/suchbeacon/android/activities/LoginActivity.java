@@ -51,9 +51,6 @@ public class LoginActivity extends Activity {
 
         mContext = this;
 
-        if (getActionBar().isShowing())
-            getActionBar().hide();
-
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         findViewById(R.id.google_plus_sign_in_button).setOnClickListener(new View.OnClickListener() {
