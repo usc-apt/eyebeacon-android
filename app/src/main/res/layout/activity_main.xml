@@ -48,7 +48,7 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="From now on, see the world differently."
+                android:text="From now on, see the world differently"
                 android:id="@+id/textView2"
                 android:fontFamily="sans-serif-light"
                 android:textSize="20dp"
