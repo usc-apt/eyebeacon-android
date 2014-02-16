@@ -47,65 +47,7 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
 
     private void scan() {
         // Stops scanning after a pre-defined scan period.
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                IBeacon closestBeacon = null;
-                double closestDistance = Double.MAX_VALUE;
-                HashMap<IBeacon, Double> beaconAverages = new HashMap<IBeacon, Double>();
-                for (Map.Entry<IBeacon, List<Double>> entry : beaconDistances.entrySet()) {
-                    double avg = 0;
-                    for (Double d : entry.getValue())
-                        avg += d;
-                    avg /= entry.getValue().size();
-                    beaconAverages.put(entry.getKey(), avg);
-                    Log.i(TAG, entry.getKey().getMajor() + ":" + entry.getKey().getMinor() + " ≈ " + avg + "m");
-                }
-                for (Map.Entry<IBeacon, Double> entry : beaconAverages.entrySet()) {
-                    if (closestBeacon == null || entry.getValue() < closestDistance) {
-                        closestBeacon = entry.getKey();
-                        closestDistance = entry.getValue();
-                    }
-                }
-                //found a beacon and it is "close"
-                if (closestBeacon != null && closestDistance <= distanceThreshold) {
-                    Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + closestDistance + "m away");
-
-                    if (closestBeacon.equals(lastBeaconScanned)) {
-                        Log.i(TAG, "already processed notifications for this beacon");
-                    } else {
-                        Util.toTheCloudAsync(getApplicationContext(), closestBeacon.getMajor(), closestBeacon.getMinor());
-
-                        lastBeaconScanned = closestBeacon;
-                        closestBeacon = null;
-                    }
-                } else {
-                    if (closestBeacon == null)
-                        Log.w(TAG, "no beacon found, closestbeacon null");
-                    else if (closestBeacon.getAccuracy() > distanceThreshold)
-                        Log.w(TAG, "no beacon found, beacon not near");
-
-                    Notification notif = new Notification.Builder(BeaconMonitor.this)
-                            .setContentTitle("eyeBeacon")
-                            .setContentText("Searching...")
-                            .setSmallIcon(R.drawable.notif_small)
-                            /*.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))*/
-                            .build();
-                    Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
-                    PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-                    notif.contentIntent = contentIntent;
-                    NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationMgr.notify(3309, notif);
-                }
-
-                Log.d(TAG, "elapsed = " + (double) (System.currentTimeMillis() - lastTime) / 1000d + "s");
-                lastTime = System.currentTimeMillis();
-
-                beaconDistances.clear();
-
-                BluetoothAdapter.getDefaultAdapter().stopLeScan(BeaconMonitor.this);
-            }
-        }, SCAN_PERIOD);
+        mHandler.postDelayed(processRunnable, SCAN_PERIOD);
 
         BluetoothAdapter.getDefaultAdapter().startLeScan(this);
     }
@@ -151,6 +93,7 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
         notificationManager.cancel(3309);
         BluetoothAdapter.getDefaultAdapter().stopLeScan(this);
         mHandler.removeCallbacks(scanRunnable);
+        mHandler.removeCallbacks(processRunnable);
     }
 
     @Override
@@ -177,6 +120,66 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
             Log.d(TAG, "starting scan");
             scan();
             mHandler.postDelayed(this, SCAN_INTERVAL);
+        }
+    };
+
+    private Runnable processRunnable = new Runnable() {
+        @Override
+        public void run() {
+            IBeacon closestBeacon = null;
+            double closestDistance = Double.MAX_VALUE;
+            HashMap<IBeacon, Double> beaconAverages = new HashMap<IBeacon, Double>();
+            for (Map.Entry<IBeacon, List<Double>> entry : beaconDistances.entrySet()) {
+                double avg = 0;
+                for (Double d : entry.getValue())
+                    avg += d;
+                avg /= entry.getValue().size();
+                beaconAverages.put(entry.getKey(), avg);
+                Log.i(TAG, entry.getKey().getMajor() + ":" + entry.getKey().getMinor() + " ≈ " + avg + "m");
+            }
+            for (Map.Entry<IBeacon, Double> entry : beaconAverages.entrySet()) {
+                if (closestBeacon == null || entry.getValue() < closestDistance) {
+                    closestBeacon = entry.getKey();
+                    closestDistance = entry.getValue();
+                }
+            }
+            //found a beacon and it is "close"
+            if (closestBeacon != null && closestDistance <= distanceThreshold) {
+                Log.i(TAG, "beacon close = " + closestBeacon.getMajor() + ":" + closestBeacon.getMinor() + " " + closestDistance + "m away");
+
+                if (closestBeacon.equals(lastBeaconScanned)) {
+                    Log.i(TAG, "already processed notifications for this beacon");
+                } else {
+                    Util.toTheCloudAsync(getApplicationContext(), closestBeacon.getMajor(), closestBeacon.getMinor());
+
+                    lastBeaconScanned = closestBeacon;
+                    closestBeacon = null;
+                }
+            } else {
+                if (closestBeacon == null)
+                    Log.w(TAG, "no beacon found, closestbeacon null");
+                else if (closestBeacon.getAccuracy() > distanceThreshold)
+                    Log.w(TAG, "no beacon found, beacon not near");
+
+                Notification notif = new Notification.Builder(BeaconMonitor.this)
+                        .setContentTitle("eyeBeacon")
+                        .setContentText("Searching...")
+                        .setSmallIcon(R.drawable.notif_small)
+                            /*.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))*/
+                        .build();
+                Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+                notif.contentIntent = contentIntent;
+                NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationMgr.notify(3309, notif);
+            }
+
+            Log.d(TAG, "elapsed = " + (double) (System.currentTimeMillis() - lastTime) / 1000d + "s");
+            lastTime = System.currentTimeMillis();
+
+            beaconDistances.clear();
+
+            BluetoothAdapter.getDefaultAdapter().stopLeScan(BeaconMonitor.this);
         }
     };
 
