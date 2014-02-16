@@ -87,7 +87,7 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
                         Log.w(TAG, "no beacon found, beacon not near");
 
                     Notification notif = new Notification.Builder(BeaconMonitor.this)
-                            .setContentTitle("No beacons found")
+                            .setContentTitle("eyeBeacon")
                             .setContentText("Searching...")
                             .setSmallIcon(R.drawable.notif_small)
                             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))
@@ -118,6 +118,16 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
         // background priority so CPU-intensive work will not disrupt our UI.
         HandlerThread thread = new HandlerThread("ServiceStartArguments");
         thread.start();
+
+        Notification notif = new Notification.Builder(BeaconMonitor.this)
+                .setContentTitle("eyeBeacon")
+                .setContentText("Searching...")
+                .setSmallIcon(R.drawable.notif_small)
+                .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(BeaconMonitor.this))
+                .build();
+        NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationMgr.notify(3309, notif);
 
         // Get the HandlerThread's Looper and use it for our Handler
         mHandler = new Handler(thread.getLooper());
