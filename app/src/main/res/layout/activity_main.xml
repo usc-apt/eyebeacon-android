@@ -10,7 +10,7 @@
         android:id="@+id/louvre_bkg"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:background="@drawable/bg">
+        android:background="@drawable/bg_off">
 
 
 
