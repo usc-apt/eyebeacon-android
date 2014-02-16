@@ -66,7 +66,25 @@ public class Util {
 
                     JSONObject json = new JSONObject(data).getJSONObject("data");
                     String name = json.getString("name");
-
+                    String imageUrl = json.getString("imageUrl");
+                    String pTitle= "eyeBeacon";
+                    String pBody = "eyeBeacon: ";
+                    String template = json.getString("template");
+                    if(template.equals("intro")){
+                        pTitle= name;
+                        pBody = pBody.concat(name);
+                    }
+                    else if(template.equals("info")){
+                        JSONArray infos = json.getJSONArray("infos");
+                        pTitle= name;
+                        pBody = pBody.concat(((JSONObject)infos.get(0)).getString("desc"));
+                    }
+                    else if(template.equals("payment")){
+                        pTitle= name;
+                        pBody = "Location: " + json.getString("location")+ "\n";
+                        pBody = pBody.concat("Price: $" + json.getString("price") + "\n");
+                        pBody = pBody.concat("\n"+json.getString("description"));
+                    }
                     Notification notif = new Notification.Builder(context)
                             .setContentTitle(name)
                             .setContentText("Beacon nearby " + major + ":" + minor)
@@ -82,8 +100,8 @@ public class Util {
                     Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");
 
                     final Map pebbleData = new HashMap();
-                    pebbleData.put("title", "EyeBeacon");
-                    pebbleData.put("body", name);
+                    pebbleData.put("title", pTitle);
+                    pebbleData.put("body", pBody);
                     final JSONObject jsonData = new JSONObject(pebbleData);
                     final String notificationData = new JSONArray().put(jsonData).toString();
 
