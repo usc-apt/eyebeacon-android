@@ -127,6 +127,8 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
                 .build();
         NotificationManager notificationMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        notificationMgr.notify(3309, notif);
+
         // Get the HandlerThread's Looper and use it for our Handler
         mHandler = new Handler(thread.getLooper());
         mHandler.post(scanRunnable);

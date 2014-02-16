@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        startService();
+        //startService();
 
     }
 
