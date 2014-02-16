@@ -151,37 +151,4 @@ public class LoginActivity extends Activity {
         } else
             super.onActivityResult(requestCode, resultCode, data);
     }
-
-//    public class VenmoJavaScriptInterface
-//    {
-//        Context mContext;
-//        Activity mActivity;
-//
-//        /** Instantiate the interface and set the context */
-//        VenmoJavaScriptInterface(Context c) {
-//            mContext = c;
-//            mActivity = (Activity)c;
-//        }
-//
-//        public void paymentSuccessful(String signed_request) {
-//            Intent i = new Intent();
-//            i.putExtra("signedrequest", signed_request);
-//            mActivity.setResult(mActivity.RESULT_OK, i);
-//            mActivity.finish();
-//        }
-//
-//        public void error(String error_message) {
-//            Intent i = new Intent();
-//            i.putExtra("error_message", error_message);
-//            mActivity.setResult(mActivity.RESULT_OK, i);
-//            mActivity.finish();
-//        }
-//
-//        public void cancel() {
-//            Intent i = new Intent();
-//            mActivity.setResult(mActivity.RESULT_CANCELED);
-//            mActivity.finish();
-//        }
-//    }
-
 }

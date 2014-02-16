@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
@@ -87,6 +88,15 @@ public class Util {
                     i.putExtra("sender", "EyeBeacon");
                     i.putExtra("notificationData", notificationData);
                     Log.i("pebble", "Sending notification to pebble");
+
+                    /* Send to activity */
+                    Intent intent = new Intent("BeaconInfo");
+                    // You can also include some extra data.
+                    intent.putExtra("Name", name);
+//                    Bundle b = new Bundle();
+//                    b.putParcelable("Location", l);
+//                    intent.putExtra("Location", b);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
                     context.sendBroadcast(i);
                 } catch (IOException e) {

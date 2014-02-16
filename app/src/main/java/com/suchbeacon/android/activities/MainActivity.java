@@ -2,7 +2,6 @@ package com.suchbeacon.android.activities;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -11,11 +10,9 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -32,7 +29,6 @@ public class MainActivity extends Activity {
     private static final int REQUEST_AUTHORIZATION = 2;
 
     private static final String TAG = "MainActivity";
-
     /*Shared prefs*/
     private static SharedPreferences sharedPrefs;
 
@@ -44,11 +40,8 @@ public class MainActivity extends Activity {
         /*Get shared prefs*/
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        if (getActionBar().isShowing())
+            getActionBar().hide();
 
         final String account = sharedPrefs.getString("account", null);
         if (account == null) {
@@ -77,8 +70,22 @@ public class MainActivity extends Activity {
             }.execute();
         }
 
-        Intent serviceIntent = new Intent(this, BeaconMonitor.class);
-        startService(serviceIntent);
+        findViewById(R.id.beacon_service_toggle_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (sharedPrefs.getBoolean("running", false)) {
+                    //Service is running, need to stop
+                    stopService();
+                }
+                else {
+                    //Service is not runnning, need to start
+                    startService();
+                }
+            }
+        });
+
+        startService();
+
     }
 
     @Override
@@ -111,39 +118,22 @@ public class MainActivity extends Activity {
             super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    public void startService() {
+        LinearLayout bkg = (LinearLayout) findViewById(R.id.louvre_bkg);
+        ImageView check = (ImageView) findViewById(R.id.check_box_beacon);
+        bkg.setBackground(getResources().getDrawable(R.drawable.bg));
+        check.setVisibility(View.VISIBLE);
+        Intent serviceIntent = new Intent(MainActivity.this, BeaconMonitor.class);
+        startService(serviceIntent);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
+    public void stopService() {
+        LinearLayout bkg = (LinearLayout) findViewById(R.id.louvre_bkg);
+        ImageView check = (ImageView) findViewById(R.id.check_box_beacon);
+        bkg.setBackground(getResources().getDrawable(R.drawable.bg_off));
+        check.setVisibility(View.INVISIBLE);
+        Intent serviceIntent = new Intent(MainActivity.this, BeaconMonitor.class);
+        stopService(serviceIntent);
     }
 
 }
