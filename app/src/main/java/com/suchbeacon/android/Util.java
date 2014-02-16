@@ -80,7 +80,7 @@ public class Util {
                     final Map pebbleData = new HashMap();
                     pebbleData.put("title", "EyeBeacon");
                     pebbleData.put("body", name);
-                    final JSONObject jsonData = new JSONObject(data);
+                    final JSONObject jsonData = new JSONObject(pebbleData);
                     final String notificationData = new JSONArray().put(jsonData).toString();
 
                     i.putExtra("messageType", "PEBBLE_ALERT");
