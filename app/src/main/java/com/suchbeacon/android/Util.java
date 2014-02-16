@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.suchbeacon.android.activities.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,10 +71,12 @@ public class Util {
                             .setContentTitle(name)
                             .setContentText("Beacon nearby " + major + ":" + minor)
                             .setSmallIcon(R.drawable.notif_small)
-                            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(context))
+//                            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop searching", Util.getStopServicePendingIntent(context))
                             .build();
+                    Intent notificationIntent = new Intent(context.getApplicationContext(), MainActivity.class);
+                    PendingIntent contentIntent = PendingIntent.getActivity(context.getApplicationContext(), 0, notificationIntent, 0);
+                    notif.contentIntent = contentIntent;
                     NotificationManager notificationMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
                     notificationMgr.notify(3309, notif);
 
                     Intent i = new Intent("com.getpebble.action.SEND_NOTIFICATION");

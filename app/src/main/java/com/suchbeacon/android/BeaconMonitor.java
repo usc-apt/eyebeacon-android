@@ -8,11 +8,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.radiusnetworks.ibeacon.IBeacon;
@@ -32,9 +30,6 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
     private static final String TAG = "BeaconMonitor";
     private static final String uuid = "0f4228c0-95ff-11e3-a5e2-0800200c9a66";
     private static final double distanceThreshold = 4;
-
-    /*Shared prefs*/
-    private static SharedPreferences sharedPrefs;
 
     private static final long SCAN_PERIOD = 15000; //give up after 10 seconds
 
@@ -112,10 +107,6 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
     public void onCreate() {
         beaconDistances.clear();
 
-        /*Get shared prefs*/
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPrefs.edit().putBoolean("running", true).commit();
-
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it
@@ -149,9 +140,6 @@ public class BeaconMonitor extends Service implements BluetoothAdapter.LeScanCal
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
-        /*Get shared prefs*/
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPrefs.edit().putBoolean("running", false).commit();
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(3309);
         BluetoothAdapter.getDefaultAdapter().stopLeScan(this);

@@ -8,9 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,6 +37,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (isRunning()) {
+            startService();
+        }
+
         /*Get shared prefs*/
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -46,27 +48,6 @@ public class MainActivity extends Activity {
         if (account == null) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, ACCOUNT_PICK_REQUEST_CODE);
-        } else {
-            new AsyncTask<Void, Void, Void>() {
-
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    try {
-                        String token = GoogleAuthUtil.getToken(MainActivity.this, account, Constants.SCOPE);
-                        Log.d("token", token);
-                        Looper.prepare();
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        clipboard.setText(token);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (UserRecoverableAuthException e) {
-                        startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
-                    } catch (GoogleAuthException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            }.execute();
         }
 
         findViewById(R.id.beacon_service_toggle_button).setOnClickListener(new View.OnClickListener() {
@@ -82,9 +63,6 @@ public class MainActivity extends Activity {
                 }
             }
         });
-
-        //startService();
-
     }
 
     @Override
