@@ -5,10 +5,6 @@
     android:layout_height="fill_parent"
     android:clickable="false">
 
-    <!-- Login progress -->
-
-    <!-- Login form -->
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:id="@+id/louvre_bkg"
@@ -32,6 +28,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="80dp"
+                    android:layout_marginTop="5dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="eyeBeacon"
                     android:id="@+id/textView"
@@ -48,7 +45,7 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="From now on, see the world differently"
+                android:text="See the world differently"
                 android:id="@+id/textView2"
                 android:fontFamily="sans-serif-light"
                 android:textSize="20dp"
@@ -72,6 +69,7 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
                 android:layout_gravity="center_horizontal|bottom">
 
                 <LinearLayout
@@ -91,8 +89,8 @@
                         android:layout_height="fill_parent">
 
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="43dp"
+                            android:layout_height="43dp"
                             android:id="@+id/imageView3"
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/notif_small"

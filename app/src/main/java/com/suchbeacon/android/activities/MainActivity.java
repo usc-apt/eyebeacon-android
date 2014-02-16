@@ -2,6 +2,8 @@ package com.suchbeacon.android.activities;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -40,9 +42,6 @@ public class MainActivity extends Activity {
         /*Get shared prefs*/
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (getActionBar().isShowing())
-            getActionBar().hide();
-
         final String account = sharedPrefs.getString("account", null);
         if (account == null) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -73,7 +72,7 @@ public class MainActivity extends Activity {
         findViewById(R.id.beacon_service_toggle_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sharedPrefs.getBoolean("running", false)) {
+                if (isRunning()) {
                     //Service is running, need to stop
                     stopService();
                 }
@@ -118,7 +117,7 @@ public class MainActivity extends Activity {
             super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void startService() {
+    private void startService() {
         LinearLayout bkg = (LinearLayout) findViewById(R.id.louvre_bkg);
         ImageView check = (ImageView) findViewById(R.id.check_box_beacon);
         bkg.setBackground(getResources().getDrawable(R.drawable.bg));
@@ -127,13 +126,23 @@ public class MainActivity extends Activity {
         startService(serviceIntent);
     }
 
-    public void stopService() {
+    private void stopService() {
         LinearLayout bkg = (LinearLayout) findViewById(R.id.louvre_bkg);
         ImageView check = (ImageView) findViewById(R.id.check_box_beacon);
         bkg.setBackground(getResources().getDrawable(R.drawable.bg_off));
         check.setVisibility(View.INVISIBLE);
         Intent serviceIntent = new Intent(MainActivity.this, BeaconMonitor.class);
         stopService(serviceIntent);
+    }
+
+    private boolean isRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (BeaconMonitor.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
