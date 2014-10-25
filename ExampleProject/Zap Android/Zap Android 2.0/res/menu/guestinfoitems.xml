@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:icon="@drawable/arrow_down"
+    android:showAsAction="ifRoom">
+    <menu>
+        <item
+            android:id="@+id/iGuestInfoCall"
+            android:title="Call Guest" />
+        <item
+            android:id="@+id/iGuestInfoMessage"
+            android:title="Send Text Message" />
+        <item
+            android:id="@+id/iGuestInfoEmail"
+            android:title="Email Guest" />
+    </menu>
+</item>
+</menu>

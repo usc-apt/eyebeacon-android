@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/iMainMenuAdd"
+    android:icon="@drawable/add"
+    android:showAsAction="ifRoom" >
+</item>
+<item
+    android:icon="@drawable/settings"
+    android:showAsAction="ifRoom">
+    <menu>
+        <item
+            android:id="@+id/iMainMenuGroups"
+            android:title="Manage Groups" />
+        <item
+            android:id="@+id/iMainMenuContactList"
+            android:title="Contact List" />
+        <item
+            android:id="@+id/iMainMenuAboutUs"
+            android:title="About Us" />
+        <item
+            android:id="@+id/iMainMenuLogout"
+            android:title="Logout" />
+    </menu>
+</item>
+</menu>

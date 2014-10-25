@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:padding="15dp" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Version: 2.0" 
+        style="@style/WhiteText" 
+        android:textSize="14dp" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Collin Yen (CEO)" 
+        style="@style/WhiteText" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Sanjeev Srivatsa (CTO)" 
+        style="@style/WhiteText" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Gavin Chu (Head of Design)" 
+        style="@style/WhiteText" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Andrew Cho (CMO)" 
+        style="@style/WhiteText" />
+    
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/WhiteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="  Contact Us:" />
+    <TextView
+        android:id="@+id/tvAboutUsEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Email: info@zapconnection.com" 
+        style="@style/WhiteText" />
+    <TextView
+        android:id="@+id/tvAboutUsWebsite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Website: www.zapconnection.com" 
+        style="@style/WhiteText" />
+
+</LinearLayout>

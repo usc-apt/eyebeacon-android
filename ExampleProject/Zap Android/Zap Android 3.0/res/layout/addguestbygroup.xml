@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/tvAddGroupMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Select groups to add to your event."
+        android:textSize="15dp"
+        android:textColor="#FFF" />
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000"
+        android:drawSelectorOnTop="false" />
+
+    <Button
+        android:id="@+id/bAddGroupSubmit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Selected Groups" 
+        android:padding="15dp"/>
+
+</LinearLayout>

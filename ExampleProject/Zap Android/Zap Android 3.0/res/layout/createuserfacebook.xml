@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/red_bg"
+    android:orientation="vertical"
+    android:padding="20dp" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:text="Your Zap user profile is almost complete. Please enter your phone number."
+        android:textColor="#FFF" />
+
+    <EditText
+        android:id="@+id/etCreateUserPhoneNumber"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Phone Number" 
+        android:inputType="number"/>
+    
+    <TextView
+        android:id="@+id/tvPhoneNumberNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="*Important: Please verify that your phone number is correct. A verification link will be sent to you through an SMS text message after creating an account."
+        android:textColor="#111" />
+    
+    <Button
+        android:id="@+id/bCreateUserFacebookSubmit"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/button"
+        android:text="Submit" 
+        android:textColor="#FFF" />
+
+</LinearLayout>

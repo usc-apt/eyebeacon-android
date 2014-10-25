@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="25dp" >
+
+    <TextView
+        android:id="@+id/tvMainTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Zap"
+        android:textColor="#FFFFFF"
+        android:textSize="35dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/bMainCreateEvent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Event" />
+
+    <Button
+        android:id="@+id/bMainViewMyEvent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="View My Events" />
+
+    <Button
+        android:id="@+id/bMainUpcomingEvents"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Upcoming Events" />
+
+    <Button
+        android:id="@+id/bMainContactList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Contact List" />
+
+    <Button
+        android:id="@+id/bMainManageGroups"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Groups" />
+
+    <TextView
+        android:id="@+id/tvBlank"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text=" "
+        android:textSize="2dp" />
+
+    <Button
+        android:id="@+id/bMainLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="   Logout   " />
+
+</LinearLayout>

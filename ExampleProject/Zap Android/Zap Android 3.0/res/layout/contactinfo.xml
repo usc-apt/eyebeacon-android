@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp" >
+    
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+		    <TextView
+		        android:id="@+id/tvBlank"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text=" " />
+		
+		    <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:paddingBottom="10dp"
+		        android:weightSum="10" >
+		
+		        <TextView
+		            android:id="@+id/tvName"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="7"
+		            android:text="Name: "
+		            style="@style/WhiteText" />
+		
+		        <TextView
+		            android:id="@+id/tvContactInfoName"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="3"
+		            android:text="(unavailable)"
+		            android:textSize="15dp" />
+		    </LinearLayout>
+		    
+		    <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:paddingBottom="10dp"
+		        android:weightSum="10" >
+		
+		        <TextView
+		            android:id="@+id/tvUsername"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="7"
+		            android:text="Username: "
+		            style="@style/WhiteText" />
+		
+		        <TextView
+		            android:id="@+id/tvContactInfoUsername"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="3"
+		            android:text="(unavailable)"
+		            android:textSize="15dp" />
+		    </LinearLayout>
+		
+		    <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:paddingBottom="10dp"
+		        android:weightSum="10" >
+		
+		        <TextView
+		            android:id="@+id/tvNumber"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="7"
+		            android:text="Phone Number: "
+		            style="@style/WhiteText" />
+		
+		        <TextView
+		            android:id="@+id/tvContactInfoPhone"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="left|center_vertical"
+		            android:layout_weight="3"
+		            android:text="(unavailable)"
+		            android:textSize="15dp" />
+		    </LinearLayout>
+		
+		    <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:paddingBottom="10dp"
+		        android:weightSum="10" >
+		
+		        <TextView
+		            android:id="@+id/tvEmail"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="7"
+		            android:text="Email: "
+		            style="@style/WhiteText" />
+		
+		        <TextView
+		            android:id="@+id/tvContactInfoEmail"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="3"
+		            android:text="(unavailable)"
+		            android:textSize="15dp" />
+		    </LinearLayout>
+		    
+		</LinearLayout>
+	    
+	</ScrollView>
+
+</LinearLayout>

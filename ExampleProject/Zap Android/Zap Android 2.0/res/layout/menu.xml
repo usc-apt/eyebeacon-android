@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/red_bg"
+    android:padding="25dp" >
+    <Button
+        android:id="@+id/bMenuCreateEvent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Event" />
+
+    <Button
+        android:id="@+id/bMenuGroups"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Groups" />
+
+    <Button
+        android:id="@+id/bMenuContactList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Contact List" />
+
+    <Button
+        android:id="@+id/bMenuAboutUs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="About Us" />
+
+    <Button
+        android:id="@+id/bMenuLogout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout" />
+
+</LinearLayout>

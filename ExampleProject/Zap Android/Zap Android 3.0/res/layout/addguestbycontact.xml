@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/tvAddContactMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Select contacts to add to your event."
+        android:textSize="15dp"
+        android:textColor="#FFF"  />
+    
+    <EditText 
+	    android:id="@+id/etAddContactSearch"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:hint="Search">
+	</EditText>
+	
+	<TextView
+        android:id="@+id/tvAddContactSearchResult"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="No Search Result Found"
+        android:textSize="14dp"
+        android:textColor="#FFF"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000"
+        android:drawSelectorOnTop="false" />
+
+    <Button
+        android:id="@+id/bAddContactSubmit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Selected Contacts" />
+
+</LinearLayout>

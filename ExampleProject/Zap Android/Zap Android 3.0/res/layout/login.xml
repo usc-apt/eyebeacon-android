@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/red_bg"
+    android:padding="20dp" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Username"
+                android:textColor="#FFF" />
+
+            <EditText
+                android:id="@+id/etLoginUsername"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username" >
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Password"
+                android:textColor="#FFF" />
+
+            <EditText
+                android:id="@+id/etLoginPassword"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="Password"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/bLoginLogin"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/button"
+                android:padding="10dp"
+                android:text="Login"
+                android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/bLoginCreateUser"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/button"
+                android:padding="10dp"
+                android:text="Create User"
+                android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/bLoginForgotPassword"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="10dp"
+                android:text="Forgot Your Password?"
+                android:textColor="#FFF" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/button_facebook_blue" >
+                
+                <Button
+                    android:id="@+id/bLoginFacebook"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iFacebookIcon"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="Create User with Facebook"
+                    android:textColor="#FFF"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/iFacebookIcon"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:src="@drawable/facebook_icon" />
+
+            </RelativeLayout>
+
+            <com.facebook.widget.LoginButton
+                xmlns:fb="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/authButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="5dp"
+                fb:login_text="Create User with Facebook"
+                fb:logout_text="Login with Facebook" />
+
+        </LinearLayout>
+        
+    </ScrollView>
+
+</LinearLayout>

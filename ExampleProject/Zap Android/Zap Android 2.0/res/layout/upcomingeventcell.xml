@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="70dp"
+    android:background="@drawable/upcoming_event_list_item"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="75dp"
+        android:layout_height="70dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvDayOfTheWeek"
+            android:layout_width="65dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:text="DAY"
+            android:textStyle="bold"
+            android:textColor="#FFF" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="65dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="00"
+            android:textSize="25dp"
+            android:textColor="#000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/iUnreadEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/unread_event" />
+
+            <ImageView
+                android:id="@+id/iUnreadMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/unread_message" />
+
+            <TextView
+                android:id="@+id/tvEventName"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical"
+                android:text="EVENT NAME"
+                android:textColor="#000"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="fill_parent"
+            android:layout_height="20dp"
+            android:gravity="center_vertical"
+            android:text="TIME"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/tvHost"
+            android:layout_width="fill_parent"
+            android:layout_height="20dp"
+            android:gravity="center_vertical"
+            android:text="HOST"
+            android:textColor="#000" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:icon="@drawable/add"
+    android:showAsAction="ifRoom">
+    <menu>
+        <item
+            android:id="@+id/iContactListAddByUsername"
+            android:title="Add By Username" />
+        <item
+            android:id="@+id/iContactListAddByEmail"
+            android:title="Add By Email" />
+        <item
+            android:id="@+id/iContactListSyncFromAddressBook"
+            android:title="Sync From Address Book" />
+    </menu>
+</item>
+</menu>

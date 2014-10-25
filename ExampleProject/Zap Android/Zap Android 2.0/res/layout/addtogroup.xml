@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:padding="10dp" >
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Select contacts to add to this group."
+        android:textSize="15dp" 
+        android:textColor="#FFF" />
+    
+    <EditText 
+	    android:id="@+id/etAddToGroupSearch"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:hint="Search">
+	</EditText>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:drawSelectorOnTop="false" 
+        android:cacheColorHint="#00000000" />
+    
+    <Button
+        android:id="@+id/bAddToGroupSubmit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="Add Selected Contacts" />
+
+</LinearLayout>

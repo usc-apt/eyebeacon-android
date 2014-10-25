@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:icon="@drawable/arrow_down"
+    android:showAsAction="ifRoom">
+    <menu>
+        <item
+            android:id="@+id/iClickedGroupAdd"
+            android:title="Add Users To Group" />
+        <item
+            android:id="@+id/iClickedGroupDelete"
+            android:title="Delete Group" />
+    </menu>
+</item>
+</menu>

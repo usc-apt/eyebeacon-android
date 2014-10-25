@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:icon="@drawable/arrow_down"
+    android:showAsAction="ifRoom">
+    <menu>
+        <item
+            android:id="@+id/iContactInfoCall"
+            android:title="Call Contact" />
+        <item
+            android:id="@+id/iContactInfoMessage"
+            android:title="Send Text Message" />
+        <item
+            android:id="@+id/iContactInfoEmail"
+            android:title="Email Contact" />
+        <item
+            android:id="@+id/iContactInfoRemove"
+            android:title="Remove Contact" />
+    </menu>
+</item>
+</menu>

@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:icon="@drawable/arrow_down"
+    android:showAsAction="ifRoom">
+    <menu>
+        <item
+            android:id="@+id/iUpcomingEventViewGuests"
+            android:title="View Guests" />
+        <item
+            android:id="@+id/iUpcomingEventAddGuests"
+            android:title="Add Guests" />
+        <item
+            android:id="@+id/iUpcomingEventChat"
+            android:title="Messages" />
+        <item
+            android:id="@+id/iUpcomingEventChangeRequests"
+            android:title="Change Requests" />
+        <item
+            android:id="@+id/iUpcomingEventRemove"
+            android:title="Remove Event" />
+    </menu>
+</item>
+</menu>
